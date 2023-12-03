@@ -1,4 +1,4 @@
-season,first_name,last_name,position,origin,destination,transfer_date,rating,stars,eligibility
+Season,First Name,Last Name,Position,Origin School,Destination School,Transfer Date,Rating,Stars,Eligibility
 2023,Joshua,Farmer,DL,Florida State,,2023-04-27T17:23:00.000Z,,3.0,Immediate
 2023,A'Jon,Vivens,RB,Colorado State,,2022-10-31T21:23:00.000Z,,3.0,Immediate
 2023,Jamar,Rucks,DL,Appalachian State,Kennesaw State,2022-12-05T11:46:00.000Z,,3.0,Immediate
