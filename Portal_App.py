@@ -8,10 +8,13 @@ app = dash.Dash(__name__)
 df = pd.read_csv('data/portal.csv')
 
 # Unique list of schools
-schools = df['origin'].dropna().unique().tolist() + df['destination'].dropna().unique().tolist()
+schools = df['Origin School'].dropna().unique().tolist() + df['Destination School'].dropna().unique().tolist()
 schools = list(set([school for school in schools if school]))  # Removing duplicates and None
 
 app.layout = html.Div([
+
+     html.H3("2023 Transfer Portal - Whose Coming and Going?"),
+
     # Image container
     html.Div(
         html.Img(src='/assets/Portal.png', width='300px', height='auto')),
@@ -44,7 +47,7 @@ app.layout = html.Div([
     html.Div(
         [html.H3("Average Ratings and Stars"),
         dash_table.DataTable(id='avg-ratings-table')],
-        style={'width': '75%', 'margin': '10px'}
+        style={'width': '60%', 'margin': '10px'}
     ),
 ], style={'display': 'flex', 'flex-direction': 'column', 'align-items': 'center'})
 
@@ -61,21 +64,21 @@ app.layout = html.Div([
 )
 def update_tables(selected_school):
     # Filter dataframes for leaving and joining players
-    df_leaving = df[(df['origin'] == selected_school) & (df['season'] == 2023)].sort_values(by='stars', ascending=False)
-    df_joining = df[(df['destination'] == selected_school) & (df['season'] == 2023)].sort_values(by='stars', ascending=False)
+    df_leaving = df[(df['Origin School'] == selected_school) & (df['Season'] == 2023)].sort_values(by='Stars', ascending=False)
+    df_joining = df[(df['Destination School'] == selected_school) & (df['Season'] == 2023)].sort_values(by='Stars', ascending=False)
 
     # Prepare data for the player tables
-    table_data_leaving = df_leaving[['first_name', 'last_name', 'destination', 'rating', 'stars']].to_dict('records')
-    columns_leaving = [{"name": i, "id": i} for i in df_leaving[['first_name', 'last_name', 'destination', 'rating', 'stars']].columns]
+    table_data_leaving = df_leaving[['First Name', 'Last Name', 'Destination School', 'Rating', 'Stars']].to_dict('records')
+    columns_leaving = [{"name": i, "id": i} for i in df_leaving[['First Name', 'Last Name', 'Destination School', 'Rating', 'Stars']].columns]
 
-    table_data_joining = df_joining[['first_name', 'last_name', 'origin', 'rating', 'stars']].to_dict('records')
-    columns_joining = [{"name": i, "id": i} for i in df_joining[['first_name', 'last_name', 'origin', 'rating', 'stars']].columns]
+    table_data_joining = df_joining[['First Name', 'Last Name', 'Origin School', 'Rating', 'Stars']].to_dict('records')
+    columns_joining = [{"name": i, "id": i} for i in df_joining[['First Name', 'Last Name', 'Origin School', 'Rating', 'Stars']].columns]
 
     # Calculate average ratings and stars
-    avg_rating_leaving = df_leaving['rating'].mean()
-    avg_stars_leaving = df_leaving['stars'].mean()
-    avg_rating_joining = df_joining['rating'].mean()
-    avg_stars_joining = df_joining['stars'].mean()
+    avg_rating_leaving = df_leaving['Rating'].mean()
+    avg_stars_leaving = df_leaving['Stars'].mean()
+    avg_rating_joining = df_joining['Rating'].mean()
+    avg_stars_joining = df_joining['Stars'].mean()
 
     # Calculate rating and star scores
     rating_score = avg_rating_joining / avg_rating_leaving if avg_rating_leaving else None
@@ -101,4 +104,4 @@ def update_tables(selected_school):
     return table_data_leaving, columns_leaving, table_data_joining, columns_joining, avg_ratings_data, avg_ratings_columns
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8052)
+    app.run_server(debug=True)
