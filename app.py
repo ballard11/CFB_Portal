@@ -17,7 +17,7 @@ app.layout = html.Div([
 
     # Image container
     html.Div(
-        html.Img(src='/assets/Portal.png', width='300px', height='auto')),
+        html.Img(src='/assets/Portal.png', width='400px', height='auto')),
 
     # Dropdown container
     html.Div(
