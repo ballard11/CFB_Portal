@@ -29,26 +29,27 @@ app.layout = html.Div([
         style={'width': '25%', 'margin': '10px'}
     ),
 
-    # Table for 'Who is Coming'
-    html.Div(
-        [html.H3("Who is Coming"),
-        dash_table.DataTable(id='joining-players-table')],
-        style={'width': '75%', 'margin': '10px'}
-    ),
-
-    # Table for 'Who is Leaving'
-    html.Div(
-        [html.H3("Who is Leaving"),
-        dash_table.DataTable(id='leaving-players-table')],
-        style={'width': '75%', 'margin': '10px'}
-    ),
-
     # Table for 'Average Ratings and Stars'
     html.Div(
         [html.H3("Average Ratings and Stars"),
         dash_table.DataTable(id='avg-ratings-table')],
         style={'width': '60%', 'margin': '10px'}
     ),
+    
+    # Table for 'Who is Coming'
+    html.Div(
+        [html.H3("Who is Coming?"),
+        dash_table.DataTable(id='joining-players-table')],
+        style={'width': '75%', 'margin': '10px'}
+    ),
+
+    # Table for 'Who is Leaving'
+    html.Div(
+        [html.H3("Who is Leaving?"),
+        dash_table.DataTable(id='leaving-players-table')],
+        style={'width': '75%', 'margin': '10px'}
+    ),
+
 ], style={'display': 'flex', 'flex-direction': 'column', 'align-items': 'center'})
 
 
@@ -68,11 +69,11 @@ def update_tables(selected_school):
     df_joining = df[(df['Destination School'] == selected_school) & (df['Season'] == 2023)].sort_values(by='Stars', ascending=False)
 
     # Prepare data for the player tables
-    table_data_leaving = df_leaving[['First Name', 'Last Name', 'Destination School', 'Rating', 'Stars']].to_dict('records')
-    columns_leaving = [{"name": i, "id": i} for i in df_leaving[['First Name', 'Last Name', 'Destination School', 'Rating', 'Stars']].columns]
+    table_data_leaving = df_leaving[['First Name', 'Last Name', 'Origin School','Destination School', 'Rating', 'Stars']].to_dict('records')
+    columns_leaving = [{"name": i, "id": i} for i in df_leaving[['First Name', 'Last Name', 'Origin School','Destination School', 'Rating', 'Stars']].columns]
 
-    table_data_joining = df_joining[['First Name', 'Last Name', 'Origin School', 'Rating', 'Stars']].to_dict('records')
-    columns_joining = [{"name": i, "id": i} for i in df_joining[['First Name', 'Last Name', 'Origin School', 'Rating', 'Stars']].columns]
+    table_data_joining = df_joining[['First Name', 'Last Name', 'Origin School', 'Destination School','Rating', 'Stars']].to_dict('records')
+    columns_joining = [{"name": i, "id": i} for i in df_joining[['First Name', 'Last Name', 'Origin School', 'Destination School','Rating', 'Stars']].columns]
 
     # Calculate average ratings and stars
     avg_rating_leaving = df_leaving['Rating'].mean()
@@ -87,21 +88,27 @@ def update_tables(selected_school):
     # Prepare data for the average ratings and stars table
     avg_ratings_data = [
         {
-            'Method': 'Rating',
-            'Avg Leaving': avg_rating_leaving,
-            'Avg Joining': avg_rating_joining,
-            'Score': rating_score
+            'Metric': 'Average Joining',
+            'Stars': round(avg_stars_joining, 2),
+            'Rating': round(avg_rating_joining, 2)
         },
         {
-            'Method': 'Stars',
-            'Avg Leaving': avg_stars_leaving,
-            'Avg Joining': avg_stars_joining,
-            'Score': star_score
+            'Metric': 'Average Leaving',
+            'Stars': round(avg_stars_leaving, 2),
+            'Rating': round(avg_rating_leaving, 2)
+        },
+        {
+            'Metric': 'Score',
+            'Stars': round(star_score, 2) if star_score is not None else None,
+            'Rating': round(rating_score, 2) if rating_score is not None else None
         }
     ]
-    avg_ratings_columns = [{"name": i, "id": i} for i in ['Method', 'Avg Leaving', 'Avg Joining', 'Score']]
+
+    avg_ratings_columns = [{"name": i, "id": i} for i in ['Metric', 'Stars', 'Rating']]
+
+
 
     return table_data_leaving, columns_leaving, table_data_joining, columns_joining, avg_ratings_data, avg_ratings_columns
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8080)  # Replace 8080 with any other free port
