@@ -1,13 +1,13 @@
 import dash
 from dash.dependencies import Input, Output
 from dash import dcc, html, dash_table
-from dash import dcc, html
 import pandas as pd
 import plotly.express as px
 
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
+server = app.server
 
 df = pd.read_csv('data/portal.csv')
 
