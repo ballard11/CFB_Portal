@@ -1,6 +1,10 @@
 import dash
-from dash import dcc, html, Input, Output, dash_table
+from dash.dependencies import Input, Output
+from dash import dcc, html, dash_table
+from dash import dcc, html
 import pandas as pd
+import plotly.express as px
+
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
