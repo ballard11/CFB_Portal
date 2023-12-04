@@ -115,4 +115,4 @@ def update_tables(selected_school):
     return table_data_leaving, columns_leaving, table_data_joining, columns_joining, avg_ratings_data, avg_ratings_columns
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8080)  # Replace 8080 with any other free port
+    app.run_server(debug=False, port=8080)  # Replace 8080 with any other free port
